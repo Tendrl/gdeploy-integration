@@ -1,3 +1,8 @@
+class UnsupportedOptionError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
 def get_hosts(host_list):
     host = {
         "hosts": host_list
@@ -6,6 +11,10 @@ def get_hosts(host_list):
 
 
 def get_peer(action):
+    if action not in ["probe", "detach"]:
+        msg = "Action %s is unsupported action for peer feature" % (action)
+        raise UnsupportedOptionError(msg)
+
     peer = {
         "action": action
     }
@@ -15,6 +24,20 @@ def get_peer(action):
 
 def get_yum(action, packages, repos=None,
             gpgcheck="yes", update="no", target_host=""):
+    if action not in ["install","remove"]:
+        msg = "Action %s is unsupported action for yum feature" % (action)
+        raise UnsupportedOptionError(msg)
+
+    if gpgcheck not in ["yes", "no"]:
+        msg = "Value {%s} is unsupported option for "+ \
+              "attribute gpgcheck in yum feature".format(gpgcheck)
+        raise UnsupportedOptionError(msg)
+
+    if update not in ["yes", "no"]:
+        msg = "Value {%s} is unsupported option for "+ \
+              "attribute update in yum feature".format(update)
+        raise UnsupportedOptionError(msg)
+
     yum = {
         "action": action,
         "packages": packages,
@@ -39,6 +62,10 @@ def get_yum(action, packages, repos=None,
 
 def get_firewall(action, ports, services="", zone="",
                  permanent=""):
+    if action not in ["add","delete"]:
+        msg = "Action %s is unsupported action for firewall feature" % (action)
+        raise UnsupportedOptionError(msg)
+
     firewall = {
         "action": action,
         "ports": ports,
@@ -57,6 +84,11 @@ def get_firewall(action, ports, services="", zone="",
             }
         )
     if permanent:
+        if permanent not in ["true", "false"]:
+            msg = "Value {%s} is unsupported value for attribute permanent"+ \
+                  "in firewall feature".format(action)
+            raise UnsupportedOptionError(msg)
+        
         firewall.update(
             {
                 "permanent": permanent,
@@ -68,6 +100,11 @@ def get_firewall(action, ports, services="", zone="",
 
 
 def get_service(action, services, target_host=""):
+    if action not in ["start", "stop", "restart",
+                      "reload", "enable", "disable"]:
+        msg = "Action %s is unsupported action for service feature" % (action)
+        raise UnsupportedOptionError(msg)
+
     service = {
         "action": action,
         "service": services,
@@ -152,6 +189,10 @@ def get_volume(volume_name, action, brick_dirs=None, transport=None,
 
 
 def get_snapshot(volume_name, action, snap_name, target_host=""):
+    if action not in ["create", "delete", "clone"]:
+        msg = "Action %s is unsupported action for snapshot feature" % (action)
+        raise UnsupportedOptionError(msg)
+
     snapshot = {
         "action": action,
         "volname": volume_name,
@@ -164,18 +205,41 @@ def get_snapshot(volume_name, action, snap_name, target_host=""):
     return {section_header: snapshot}
 
 
-def get_quota(volume_name, action, path=[], size=[], target_host=""):
+def get_quota(volume_name, action, path=[], size=[],
+              number=[], target_host=""):
+    if action not in ["limit-usage", "limit-objects"]:
+        msg = "Action %s is unsupported action for quota feature" % (action)
+        raise UnsupportedOptionError(msg)
+    
     quota = {
         "volname": volume_name,
         "action": action
     }
-    if path:
-        quota.update(
-            {
-                "path": path,
-                "size": size
-            }
-        )
+
+    if action == "limit-usage":
+        if path and size:
+            quota.update(
+                {
+                    "path": path,
+                    "size": size
+                }
+            )
+        else:
+            msg = "path/size attribute(s) missing. these are mandatory"+ \
+                  "if action is limit-usage"
+            raise UnsupportedOptionError(msg)
+    elif action == "limit-objects":
+        if path and number:
+            quota.update(
+                {
+                    "path": path,
+                    "number": number
+                }
+            )
+        else:
+            msg = "path/number attribute(s) missing. these are mandatory"+ \
+                  "if action is limit-objects"
+            raise UnsupportedOptionError(msg)
 
     section_header = "quota"
     if target_host:

@@ -1,3 +1,4 @@
+coverage
 hacking
 pytest
 pytest-cov
@@ -7,5 +8,5 @@ oslosphinx!=3.4.0,>=2.5.0 # Apache-2.0
 
 # releasenotes
 reno>=1.8.0 # Apache2
-coveralls
+codecov
 mock==1.0.1
