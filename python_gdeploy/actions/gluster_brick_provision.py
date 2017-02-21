@@ -3,7 +3,7 @@ from python_gdeploy.wrapper.gdeploy_wrapper import cook_gdeploy_config
 from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
-def provision_disks(disk_dictionary):
+def provison_disks(disk_dictionary):
     """Structure of disk dictionary
 
     {"host_name_0": {

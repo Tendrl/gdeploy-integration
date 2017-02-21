@@ -25,7 +25,7 @@ def expand_volume(volume_name, brick_details, replica_count="",
         for brick in host.values()[0]:
             brick_list.append(host.keys()[0] + ":" + brick)
     recipe.append(gf.get_hosts(host_list))
-
+    force = "yes" if force else "no"
     recipe.append(
         gf.get_volume(
             volume_name,

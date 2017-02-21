@@ -292,3 +292,94 @@ class TestGdeployFeatures(object):
             vol_name,
             action
         )
+
+    def test_get_volume(self):
+        volume_name = "vol1"
+        action = "create"
+        brick_dirs = ["/mnt/brick/b1","/mnt/brick/b2",
+                      "/mnt/brick/b3","/mnt/brick/b3"]
+        transport = "tcp"
+        replica_count = 2
+        disperse = "yes"
+        disperse_count = 2
+        redundancy_count = 2
+        force = "yes"
+        target_host = "12.23.34.45"
+        option_keys = ["key1", "key2", "key3", "key4"]
+        option_values = ["value1", "value2", "value3", "value4"]
+        
+        volume = gf.get_volume(
+            volume_name,
+            action,
+            brick_dirs,
+            transport,
+            replica_count,
+            disperse,
+            disperse_count,
+            redundancy_count,
+            force,
+            target_host,
+            option_keys=option_keys,
+            option_values=option_values
+        )
+
+        expected_volume = {
+            "volume:12.23.34.45": {
+                "volname": "vol1",
+                "action": "create",
+                "brick_dirs": ["/mnt/brick/b1","/mnt/brick/b2",
+                                "/mnt/brick/b3","/mnt/brick/b3"],
+                "transport": "tcp",
+                "replica_count": "2",
+                "disperse": "yes",
+                "disperse_count": "2",
+                "redundancy_count": "2",
+                "force": "yes",
+                "key": ["key1", "key2", "key3", "key4"],
+                "value": ["value1", "value2", "value3", "value4"]
+            }
+        }
+        assert volume == expected_volume
+
+        action = "unsupported_action"
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_volume,
+            volume_name,
+            action
+        )
+        
+        action = "set"
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_volume,
+            volume_name,
+            action
+        )
+
+        action = "rebalance"
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_volume,
+            volume_name,
+            action
+        )
+
+        action = "add-brick"
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_volume,
+            volume_name,
+            action
+        )
+
+        action = "create"
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_volume,
+            volume_name,
+            action,
+            force="Invalid-option"
+        )
+
+

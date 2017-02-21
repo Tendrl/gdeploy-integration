@@ -29,12 +29,12 @@ def get_yum(action, packages, repos=None,
         raise UnsupportedOptionError(msg)
 
     if gpgcheck not in ["yes", "no"]:
-        msg = "Value {%s} is unsupported option for "+ \
+        msg = "Value {} is unsupported option for "+ \
               "attribute gpgcheck in yum feature".format(gpgcheck)
         raise UnsupportedOptionError(msg)
 
     if update not in ["yes", "no"]:
-        msg = "Value {%s} is unsupported option for "+ \
+        msg = "Value {} is unsupported option for "+ \
               "attribute update in yum feature".format(update)
         raise UnsupportedOptionError(msg)
 
@@ -85,7 +85,7 @@ def get_firewall(action, ports, services="", zone="",
         )
     if permanent:
         if permanent not in ["true", "false"]:
-            msg = "Value {%s} is unsupported value for attribute permanent"+ \
+            msg = "Value {} is unsupported value for attribute permanent"+ \
                   "in firewall feature".format(action)
             raise UnsupportedOptionError(msg)
         
@@ -154,29 +154,59 @@ def get_backend_setup(devices, vgs=None, pools=None, lvs=None,
 
 def get_volume(volume_name, action, brick_dirs=None, transport=None,
                replica_count=None, disperse=None, disperse_count=None,
-               redundancy_count=None, force="", target_host="",
+               redundancy_count=None, force="", target_host="", state="",
                option_keys=[], option_values=[]):
+    if action not in ["start", "stop", "create",
+                      "delete", "rebalance", "remove-brick",
+                      "add-brick", "set"]:
+        msg = "Action %s is unsupported action for volume feature" % (action)
+        raise UnsupportedOptionError(msg)
+
+    if action == "set":
+        if not option_keys or not option_values:
+            msg = "key/value attribute(s) missing. these are mandatory"+ \
+                  "if action is set"
+            raise UnsupportedOptionError(msg)
+
+    if action == "rebalance" or action == "remove-brick":
+        if not state:
+            msg = "state attribute missing. it is mandatory"+ \
+                  "for action {}".format(action)
+            raise UnsupportedOptionError(msg)
+        volume.update({"state": state})
+
+    if action == "add-brick" or action == "remove-brick":
+        if not brick_dirs:
+            msg = "bricks attribute missing. it is mandatory"+ \
+                  "for action {}".format(action)
+            raise UnsupportedOptionError(msg)
+
     volume = {
         "volname": volume_name,
         "action": action
     }
     if brick_dirs:
-        if action == "add-brick":
+        if action == "add-brick" or action == "remove-brick":
             volume.update({"bricks": brick_dirs})
         else:
             volume.update({"brick_dirs": brick_dirs})
     if transport:
         volume.update({"transport": transport})
     if replica_count:
-        volume.update({"replica_count": replica_count})
+        volume.update({"replica_count": str(replica_count)})
     if disperse_count:
-        volume.update({"disperse_count": disperse_count})
+        volume.update({"disperse_count": str(disperse_count)})
     if disperse:
         volume.update({"disperse": disperse})
     if redundancy_count:
-        volume.update({"redundancy_count": redundancy_count})
-    if force != "":
-        volume.update({"force": "yes" if force else "no"})
+        volume.update({"redundancy_count": str(redundancy_count)})
+    if force:
+        if force not in ["yes", "no"]:
+            msg = "Value {} is unsupported option for "+ \
+                  "attribute force in volume feature".format(force)
+            raise UnsupportedOptionError(msg)
+        volume.update({"force": force})
+
     if option_keys:
         volume.update({"key": option_keys})
     if option_values:

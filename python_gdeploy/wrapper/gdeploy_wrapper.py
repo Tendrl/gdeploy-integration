@@ -1,6 +1,7 @@
 import ConfigParser
 import subprocess
 import uuid
+import os
 
 GDEPLOY_CONFIG_PATH = "/var/run/python_gdeploy/config_"
 
@@ -41,4 +42,5 @@ def invoke_gdeploy(config):
                                stderr=subprocess.PIPE)
     out, err = process.communicate()
     rc = process.returncode
+    os.remove(conf_file)
     return out, err, rc
