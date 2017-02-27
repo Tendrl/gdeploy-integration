@@ -3,7 +3,8 @@ from python_gdeploy.wrapper.gdeploy_wrapper import cook_gdeploy_config
 from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
-def provison_disks(disk_dictionary):
+def provison_disks(disk_dictionary, disk_type=None,
+                   disk_count=None, stripe_size=None):
     """Structure of disk dictionary
 
     {"host_name_0": {
@@ -63,6 +64,9 @@ def provison_disks(disk_dictionary):
      }
 
     }
+    disk_type = [RAID10|RAID6|JBOD]
+    disk_count = is nos of data disks in case of RAID device
+    stripe_size = stripe size in KB in case of RAID device
     """
     recipe = []
     recipe.append(gf.get_hosts(disk_dictionary.keys()))
@@ -82,6 +86,23 @@ def provison_disks(disk_dictionary):
                 target_host=host
             )
         )
+    if disk_type:
+        recipe.append(
+            gf.get_disktype(disk_type)
+        )
+        if disk_type in ["RAID6", "RAID10"]:
+            if not stripe_size or not disk_count:
+                raise ValueError(
+                    "Stripe size and disk count is mandatory" +
+                    "for disk of type: %s" % (disk_type)
+                )
+            else:
+                recipe.append(
+                    gf.get_diskcount(disk_count)
+                )
+                recipe.append(
+                    gf.get_stripesize(stripe_size)
+                )
 
     config_str = cook_gdeploy_config(recipe)
 

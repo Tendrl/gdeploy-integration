@@ -1,14 +1,13 @@
-import pytest
 from python_gdeploy.actions import create_cluster as cc
 
 
 class TestCreateCluster(object):
     def test_create_cluster(self, monkeypatch):
-        host_list = ["12.23.34.45","22.23.34.45"]
-        
+        host_list = ["12.23.34.45", "22.23.34.45"]
+
         def mock_cook_gdeploy_config(recipe):
             assert recipe == [
-                {"hosts": ["12.23.34.45","22.23.34.45"]},
+                {"hosts": ["12.23.34.45", "22.23.34.45"]},
                 {"peer": {"action": "probe"}}
             ]
             return ""

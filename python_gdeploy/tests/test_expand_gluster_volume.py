@@ -1,4 +1,3 @@
-import pytest
 from python_gdeploy.actions import expand_gluster_volume as egv
 
 
@@ -6,7 +5,7 @@ class TestExpandVolume(object):
     def test_create_volume(self, monkeypatch):
         volume_name = "vol1"
         brick_details = [
-            {"12.23.34.45": ["brick1","brick2"]}
+            {"12.23.34.45": ["brick1", "brick2"]}
         ]
         replica_count = "2"
         force = False

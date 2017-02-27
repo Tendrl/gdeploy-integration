@@ -1,4 +1,3 @@
-import pytest
 from python_gdeploy.actions import volume_quota_config as vqc
 
 
@@ -12,7 +11,7 @@ class TestVolumeSnapshotConfig(object):
             {"dir2": "6MB"},
             {"dir3": "7MB"}
         ]
-        
+
         def mock_cook_gdeploy_config(recipe):
             expected_recipe = [
                 {'quota': {

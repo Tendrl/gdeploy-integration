@@ -1,10 +1,9 @@
-import pytest
 from python_gdeploy.actions import setup_gluster_node as sgn
 
 
 class TestSetupGlusterNode(object):
     def test_setup_gluster_node(self, monkeypatch):
-        host_list = ["12.23.34.45","22.23.34.45"]
+        host_list = ["12.23.34.45", "22.23.34.45"]
         glusterfs_repo = "https://download.gluster.org/gluster.repo"
 
         def mock_cook_gdeploy_config(recipe):

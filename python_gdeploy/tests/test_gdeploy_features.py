@@ -4,12 +4,44 @@ from python_gdeploy.wrapper import gdeploy_features as gf
 
 class TestGdeployFeatures(object):
     def test_get_hosts(self):
-        host_list = ["12.34.45.56","23.56.78.43","45,67,43,12"] 
+        host_list = ["12.34.45.56", "23.56.78.43", "45,67,43,12"]
         host = gf.get_hosts(host_list)
         expected_host_dict = {
-            "hosts": ["12.34.45.56","23.56.78.43","45,67,43,12"]
+            "hosts": ["12.34.45.56", "23.56.78.43", "45,67,43,12"]
         }
         assert host == expected_host_dict
+
+    def test_get_disktype(self):
+        disk_type = "RAID6"
+        dt = gf.get_disktype(disk_type)
+        expected_dt = {
+            "disktype": "RAID6"
+        }
+        assert dt == expected_dt
+
+        disk_type = "invalid_disk_type"
+
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_disktype,
+            disk_type
+        )
+
+    def test_get_diskcount(self):
+        disk_count = 5
+        dc = gf.get_diskcount(disk_count)
+        expected_dc = {
+            "diskcount": "5"
+        }
+        assert dc == expected_dc
+
+    def test_get_stripesize(self):
+        stripe_size = 256
+        ss = gf.get_stripesize(stripe_size)
+        expected_ss = {
+            "stripesize": "256"
+        }
+        assert ss == expected_ss
 
     def test_get_peer(self):
         action = "probe"
@@ -20,7 +52,7 @@ class TestGdeployFeatures(object):
             }
         }
         assert peer == expected_peer_dict
-        
+
         action = "invalid_option"
         pytest.raises(
             gf.UnsupportedOptionError,
@@ -44,9 +76,9 @@ class TestGdeployFeatures(object):
             update,
             target_host
         )
-    
+
         expected_yum = {
-            "yum:12.34.45.56" : {
+            "yum:12.34.45.56": {
                 "action": "install",
                 "packages": ["glusterfs", "glusterfs-cli", "glusterfs-api"],
                 "gpgcheck": "yes",
@@ -85,8 +117,8 @@ class TestGdeployFeatures(object):
 
     def test_get_firewall(self):
         action = "add"
-        ports=["12","45","456"]
-        services=["glusterd","collectd"]
+        ports = ["12", "45", "456"]
+        services = ["glusterd", "collectd"]
         zone = "public"
         permanent = "true"
 
@@ -98,10 +130,10 @@ class TestGdeployFeatures(object):
             permanent
         )
         expected_firewall = {
-            "firewalld" : {
+            "firewalld": {
                 "action": "add",
-                "ports": ["12","45","456"],
-                "services": ["glusterd","collectd"],
+                "ports": ["12", "45", "456"],
+                "services": ["glusterd", "collectd"],
                 "zone": "public",
                 "permanent": "true"
             }
@@ -138,9 +170,9 @@ class TestGdeployFeatures(object):
             services,
             target_host
         )
-    
+
         expected_service = {
-            "service:12.34.45.56" : {
+            "service:12.34.45.56": {
                 "action": "start",
                 "service": ["glusterd", "collectd"]
             }
@@ -157,13 +189,13 @@ class TestGdeployFeatures(object):
 
     def test_get_backend_setup(self):
         devices = ["/dev/sda", "/dev/sdb"]
-        vgs = ["vg1","vg2","vg3"]
-        pools = ["pool1","pool2","pool3"]
-        lvs = ["lv1","lv2","lv3"]
-        mountpoints = ["/mnt/data1","/mnt/data2","/mnt/data3"]
-        brick_dirs = ["/mnt/data1/1","/mnt/data2/2","/mnt/data3/2"]
+        vgs = ["vg1", "vg2", "vg3"]
+        pools = ["pool1", "pool2", "pool3"]
+        lvs = ["lv1", "lv2", "lv3"]
+        mountpoints = ["/mnt/data1", "/mnt/data2", "/mnt/data3"]
+        brick_dirs = ["/mnt/data1/1", "/mnt/data2/2", "/mnt/data3/2"]
         target_host = "12.34.45.56"
-        lv_size="5MB"
+        lv_size = "5MB"
 
         backend_setup = gf.get_backend_setup(
             devices,
@@ -175,16 +207,16 @@ class TestGdeployFeatures(object):
             brick_dirs,
             target_host
         )
-        
+
         expected_backend_setup = {
             "backend-setup:12.34.45.56": {
                 "devices": ["/dev/sda", "/dev/sdb"],
-                "vgs": ["vg1","vg2","vg3"],
-                "lvs": ["lv1","lv2","lv3"],
-                "pools": ["pool1","pool2","pool3"],
+                "vgs": ["vg1", "vg2", "vg3"],
+                "lvs": ["lv1", "lv2", "lv3"],
+                "pools": ["pool1", "pool2", "pool3"],
                 "size": "5MB",
-                "mountpoints": ["/mnt/data1","/mnt/data2","/mnt/data3"],
-                "brick_dirs": ["/mnt/data1/1","/mnt/data2/2","/mnt/data3/2"]
+                "mountpoints": ["/mnt/data1", "/mnt/data2", "/mnt/data3"],
+                "brick_dirs": ["/mnt/data1/1", "/mnt/data2/2", "/mnt/data3/2"]
             }
         }
 
@@ -204,13 +236,13 @@ class TestGdeployFeatures(object):
         )
 
         expected_snapshot = {
-            "snapshot:12.23.34.45" : {
+            "snapshot:12.23.34.45": {
                 "action": "create",
                 "volname": "vol1",
                 "snap_name": "snap1"
             }
         }
-        
+
         assert snapshot == expected_snapshot
 
         action = "unsupported_action"
@@ -238,18 +270,18 @@ class TestGdeployFeatures(object):
         )
 
         expected_quota = {
-            "quota:12.34.45.56" : {
+            "quota:12.34.45.56": {
                 "action": "limit-objects",
                 "volname": "vol1",
                 "path": "/mnt/brick1/dir1",
                 "number": "1000"
             }
         }
-        
+
         assert quota == expected_quota
 
         action = "limit-usage"
-        size="5GB"
+        size = "5GB"
         quota = gf.get_quota(
             vol_name,
             action,
@@ -259,14 +291,14 @@ class TestGdeployFeatures(object):
         )
 
         expected_quota = {
-            "quota:12.34.45.56" : {
+            "quota:12.34.45.56": {
                 "action": "limit-usage",
                 "volname": "vol1",
                 "path": "/mnt/brick1/dir1",
                 "size": "5GB"
             }
         }
-        
+
         assert quota == expected_quota
 
         action = "unsupported_action"
@@ -296,8 +328,8 @@ class TestGdeployFeatures(object):
     def test_get_volume(self):
         volume_name = "vol1"
         action = "create"
-        brick_dirs = ["/mnt/brick/b1","/mnt/brick/b2",
-                      "/mnt/brick/b3","/mnt/brick/b3"]
+        brick_dirs = ["/mnt/brick/b1", "/mnt/brick/b2",
+                      "/mnt/brick/b3", "/mnt/brick/b3"]
         transport = "tcp"
         replica_count = 2
         disperse = "yes"
@@ -307,7 +339,7 @@ class TestGdeployFeatures(object):
         target_host = "12.23.34.45"
         option_keys = ["key1", "key2", "key3", "key4"]
         option_values = ["value1", "value2", "value3", "value4"]
-        
+
         volume = gf.get_volume(
             volume_name,
             action,
@@ -327,8 +359,8 @@ class TestGdeployFeatures(object):
             "volume:12.23.34.45": {
                 "volname": "vol1",
                 "action": "create",
-                "brick_dirs": ["/mnt/brick/b1","/mnt/brick/b2",
-                                "/mnt/brick/b3","/mnt/brick/b3"],
+                "brick_dirs": ["/mnt/brick/b1", "/mnt/brick/b2",
+                               "/mnt/brick/b3", "/mnt/brick/b3"],
                 "transport": "tcp",
                 "replica_count": "2",
                 "disperse": "yes",
@@ -348,7 +380,7 @@ class TestGdeployFeatures(object):
             volume_name,
             action
         )
-        
+
         action = "set"
         pytest.raises(
             gf.UnsupportedOptionError,
@@ -381,5 +413,3 @@ class TestGdeployFeatures(object):
             action,
             force="Invalid-option"
         )
-
-

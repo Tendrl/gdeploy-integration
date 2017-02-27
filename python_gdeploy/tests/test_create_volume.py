@@ -1,4 +1,3 @@
-import pytest
 from python_gdeploy.actions import create_gluster_volume as cgv
 
 
@@ -6,9 +5,9 @@ class TestCreateVolume(object):
     def test_create_volume(self, monkeypatch):
         volume_name = "vol1"
         brick_details = [
-            {"12.23.34.45": ["brick1","brick2"]},
-            {"22.23.34.45": ["brick3","brick4"]},
-            {"32.23.34.45": ["brick5","brick6"]},
+            {"12.23.34.45": ["brick1", "brick2"]},
+            {"22.23.34.45": ["brick3", "brick4"]},
+            {"32.23.34.45": ["brick5", "brick6"]},
         ]
         transport = "rdma"
         replica_count = "2"
@@ -16,7 +15,7 @@ class TestCreateVolume(object):
 
         def mock_cook_gdeploy_config(recipe):
             expected_recipe = [
-                {"hosts": ["12.23.34.45","22.23.34.45","32.23.34.45"]},
+                {"hosts": ["12.23.34.45", "22.23.34.45", "32.23.34.45"]},
                 {
                     "volume": {
                         "volname": "vol1",

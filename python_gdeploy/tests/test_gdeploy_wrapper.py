@@ -1,4 +1,3 @@
-import pytest
 from python_gdeploy.wrapper import gdeploy_wrapper as gw
 import subprocess
 import uuid
@@ -12,6 +11,7 @@ expected_config = """[hosts]
 devices=vda,vdb
 
 """
+
 
 class process(object):
     def __init__(self):
@@ -33,10 +33,10 @@ class TestGdeployWrapper(object):
 
     def test_cook_gdeploy_config(self):
         recipe1 = [
-            {"hosts": ["12.23.34.45","23.34.45.56","34.45.56.67"]},
+            {"hosts": ["12.23.34.45", "23.34.45.56", "34.45.56.67"]},
             {
                 "backend-setup": {
-                    "devices" : ["vda","vdb"]
+                    "devices": ["vda", "vdb"]
                 }
             }
         ]
@@ -60,7 +60,7 @@ class TestGdeployWrapper(object):
             assert stderr == subprocess.PIPE
             return process()
         monkeypatch.setattr(subprocess, "Popen", mock_subprocess_popen)
-        
+
         out, err, rc = gw.invoke_gdeploy("")
         assert out == "dummy output string"
         assert err == "dummy err string"

@@ -24,17 +24,17 @@ def get_peer(action):
 
 def get_yum(action, packages, repos=None,
             gpgcheck="yes", update="no", target_host=""):
-    if action not in ["install","remove"]:
+    if action not in ["install", "remove"]:
         msg = "Action %s is unsupported action for yum feature" % (action)
         raise UnsupportedOptionError(msg)
 
     if gpgcheck not in ["yes", "no"]:
-        msg = "Value {} is unsupported option for "+ \
+        msg = "Value {} is unsupported option for " + \
               "attribute gpgcheck in yum feature".format(gpgcheck)
         raise UnsupportedOptionError(msg)
 
     if update not in ["yes", "no"]:
-        msg = "Value {} is unsupported option for "+ \
+        msg = "Value {} is unsupported option for " + \
               "attribute update in yum feature".format(update)
         raise UnsupportedOptionError(msg)
 
@@ -62,7 +62,7 @@ def get_yum(action, packages, repos=None,
 
 def get_firewall(action, ports, services="", zone="",
                  permanent=""):
-    if action not in ["add","delete"]:
+    if action not in ["add", "delete"]:
         msg = "Action %s is unsupported action for firewall feature" % (action)
         raise UnsupportedOptionError(msg)
 
@@ -85,10 +85,10 @@ def get_firewall(action, ports, services="", zone="",
         )
     if permanent:
         if permanent not in ["true", "false"]:
-            msg = "Value {} is unsupported value for attribute permanent"+ \
+            msg = "Value {} is unsupported value for attribute permanent" + \
                   "in firewall feature".format(action)
             raise UnsupportedOptionError(msg)
-        
+
         firewall.update(
             {
                 "permanent": permanent,
@@ -152,6 +152,27 @@ def get_backend_setup(devices, vgs=None, pools=None, lvs=None,
     return {section_header: backend_setup}
 
 
+def get_disktype(disk_type):
+    if disk_type not in ["RAID10", "RAID6", "JBOD"]:
+        msg = "disk_type %s is unsupported type for disk" % (disk_type)
+        raise UnsupportedOptionError(msg)
+    return {
+        "disktype": disk_type
+    }
+
+
+def get_diskcount(disk_count):
+    return {
+        "diskcount": str(disk_count)
+    }
+
+
+def get_stripesize(stripe_size):
+    return {
+        "stripesize": str(stripe_size)
+    }
+
+
 def get_volume(volume_name, action, brick_dirs=None, transport=None,
                replica_count=None, disperse=None, disperse_count=None,
                redundancy_count=None, force="", target_host="", state="",
@@ -164,20 +185,13 @@ def get_volume(volume_name, action, brick_dirs=None, transport=None,
 
     if action == "set":
         if not option_keys or not option_values:
-            msg = "key/value attribute(s) missing. these are mandatory"+ \
+            msg = "key/value attribute(s) missing. these are mandatory" + \
                   "if action is set"
             raise UnsupportedOptionError(msg)
 
-    if action == "rebalance" or action == "remove-brick":
-        if not state:
-            msg = "state attribute missing. it is mandatory"+ \
-                  "for action {}".format(action)
-            raise UnsupportedOptionError(msg)
-        volume.update({"state": state})
-
     if action == "add-brick" or action == "remove-brick":
         if not brick_dirs:
-            msg = "bricks attribute missing. it is mandatory"+ \
+            msg = "bricks attribute missing. it is mandatory" + \
                   "for action {}".format(action)
             raise UnsupportedOptionError(msg)
 
@@ -185,6 +199,14 @@ def get_volume(volume_name, action, brick_dirs=None, transport=None,
         "volname": volume_name,
         "action": action
     }
+
+    if action == "rebalance" or action == "remove-brick":
+        if not state:
+            msg = "state attribute missing. it is mandatory" + \
+                  "for action {}".format(action)
+            raise UnsupportedOptionError(msg)
+        volume.update({"state": state})
+
     if brick_dirs:
         if action == "add-brick" or action == "remove-brick":
             volume.update({"bricks": brick_dirs})
@@ -202,7 +224,7 @@ def get_volume(volume_name, action, brick_dirs=None, transport=None,
         volume.update({"redundancy_count": str(redundancy_count)})
     if force:
         if force not in ["yes", "no"]:
-            msg = "Value {} is unsupported option for "+ \
+            msg = "Value {} is unsupported option for " + \
                   "attribute force in volume feature".format(force)
             raise UnsupportedOptionError(msg)
         volume.update({"force": force})
@@ -240,7 +262,7 @@ def get_quota(volume_name, action, path=[], size=[],
     if action not in ["limit-usage", "limit-objects"]:
         msg = "Action %s is unsupported action for quota feature" % (action)
         raise UnsupportedOptionError(msg)
-    
+
     quota = {
         "volname": volume_name,
         "action": action
@@ -255,7 +277,7 @@ def get_quota(volume_name, action, path=[], size=[],
                 }
             )
         else:
-            msg = "path/size attribute(s) missing. these are mandatory"+ \
+            msg = "path/size attribute(s) missing. these are mandatory" + \
                   "if action is limit-usage"
             raise UnsupportedOptionError(msg)
     elif action == "limit-objects":
@@ -267,7 +289,7 @@ def get_quota(volume_name, action, path=[], size=[],
                 }
             )
         else:
-            msg = "path/number attribute(s) missing. these are mandatory"+ \
+            msg = "path/number attribute(s) missing. these are mandatory" + \
                   "if action is limit-objects"
             raise UnsupportedOptionError(msg)
 

@@ -1,7 +1,6 @@
-import ConfigParser
+import os
 import subprocess
 import uuid
-import os
 
 GDEPLOY_CONFIG_PATH = "/var/run/python_gdeploy/config_"
 

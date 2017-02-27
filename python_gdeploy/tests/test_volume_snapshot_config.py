@@ -1,4 +1,3 @@
-import pytest
 from python_gdeploy.actions import snapshot_config as vsc
 
 
@@ -8,7 +7,7 @@ class TestVolumeSnapshotConfig(object):
         hostname = "12.23.34.45"
         action = "create"
         snapname = "snap1"
-        
+
         def mock_cook_gdeploy_config(recipe):
             expected_recipe = [
                 {
