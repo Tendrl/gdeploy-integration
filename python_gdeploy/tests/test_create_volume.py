@@ -27,7 +27,8 @@ class TestCreateVolume(object):
                         ],
                         "transport": "rdma",
                         "replica_count": "2",
-                        "force": "no"
+                        "force": "no",
+                        "ignore_volume_errors": "no",
                     }
                 }
             ]

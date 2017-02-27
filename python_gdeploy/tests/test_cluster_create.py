@@ -8,7 +8,7 @@ class TestCreateCluster(object):
         def mock_cook_gdeploy_config(recipe):
             assert recipe == [
                 {"hosts": ["12.23.34.45", "22.23.34.45"]},
-                {"peer": {"action": "probe"}}
+                {"peer": {"action": "probe", "ignore_peer_errors": "no"}}
             ]
             return ""
         monkeypatch.setattr(cc, 'cook_gdeploy_config',

@@ -48,7 +48,8 @@ class TestGdeployFeatures(object):
         peer = gf.get_peer(action)
         expected_peer_dict = {
             "peer": {
-                "action": "probe"
+                "action": "probe",
+                "ignore_peer_errors": "no"
             }
         }
         assert peer == expected_peer_dict
@@ -83,6 +84,7 @@ class TestGdeployFeatures(object):
                 "packages": ["glusterfs", "glusterfs-cli", "glusterfs-api"],
                 "gpgcheck": "yes",
                 "update": "yes",
+                "ignore_yum_errors": "no",
                 "repos": ["https://asda.asds.asd/dsfsd/sdfsdf.repo"]
             }
         }
@@ -174,6 +176,7 @@ class TestGdeployFeatures(object):
         expected_service = {
             "service:12.34.45.56": {
                 "action": "start",
+                "ignore_service_errors": "no",
                 "service": ["glusterd", "collectd"]
             }
         }
@@ -367,6 +370,7 @@ class TestGdeployFeatures(object):
                 "disperse_count": "2",
                 "redundancy_count": "2",
                 "force": "yes",
+                "ignore_volume_errors": "no",
                 "key": ["key1", "key2", "key3", "key4"],
                 "value": ["value1", "value2", "value3", "value4"]
             }

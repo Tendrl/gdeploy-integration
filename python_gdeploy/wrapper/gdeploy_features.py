@@ -16,7 +16,8 @@ def get_peer(action):
         raise UnsupportedOptionError(msg)
 
     peer = {
-        "action": action
+        "action": action,
+        "ignore_peer_errors": "no"
     }
 
     return {"peer": peer}
@@ -41,6 +42,7 @@ def get_yum(action, packages, repos=None,
     yum = {
         "action": action,
         "packages": packages,
+        "ignore_yum_errors": "no"
     }
 
     if action == "install":
@@ -108,6 +110,7 @@ def get_service(action, services, target_host=""):
     service = {
         "action": action,
         "service": services,
+        "ignore_service_errors": "no"
     }
 
     section_header = "service"
@@ -197,7 +200,8 @@ def get_volume(volume_name, action, brick_dirs=None, transport=None,
 
     volume = {
         "volname": volume_name,
-        "action": action
+        "action": action,
+        "ignore_volume_errors": "no"
     }
 
     if action == "rebalance" or action == "remove-brick":

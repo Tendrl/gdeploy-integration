@@ -50,7 +50,8 @@ class TestGdeployWrapper(object):
             return "87edcddd-f61b-4699-951f-187e6e022dc9"
         monkeypatch.setattr(uuid, 'uuid4', mock_uuid)
 
-        def mock_subprocess_popen(args=None, stdout=None, stderr=None):
+        def mock_subprocess_popen(args=None, stdout=None, stderr=None,
+                                  close_fds=None):
             assert args == [
                 "gdeploy",
                 "-c",

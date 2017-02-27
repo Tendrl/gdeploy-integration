@@ -12,6 +12,7 @@ class TestSetupGlusterNode(object):
                 {'yum': {
                     'action': 'install',
                     'gpgcheck': 'no',
+                    'ignore_yum_errors': 'no',
                     'repos': 'https://download.gluster.org/gluster.repo',
                     'packages': [
                         'glusterfs',
@@ -25,9 +26,11 @@ class TestSetupGlusterNode(object):
                     'update': 'no'}},
                 {'service': {
                     'action': 'enable',
+                    'ignore_service_errors': 'no',
                     'service': 'glusterd'}},
                 {'service': {
                     'action': 'start',
+                    'ignore_service_errors': 'no',
                     'service': 'glusterd'}},
                 {'firewalld': {
                     'action': 'add',

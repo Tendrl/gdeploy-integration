@@ -17,6 +17,7 @@ class TestSetupVolumeOptions(object):
                     "volume": {
                         "action": "set",
                         "volname": "12.23.34.45:vol1",
+                        "ignore_volume_errors": "no",
                         "key": ["option1", "option2", "option3"],
                         "value": ["value1", "value2", "value3"],
                     }

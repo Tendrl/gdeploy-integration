@@ -21,7 +21,8 @@ class TestExpandVolume(object):
                             "12.23.34.45:brick1", "12.23.34.45:brick2"
                         ],
                         "replica_count": "2",
-                        "force": "no"
+                        "force": "no",
+                        "ignore_volume_errors": "no",
                     }
                 }
             ]

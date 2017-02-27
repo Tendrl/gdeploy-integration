@@ -36,9 +36,12 @@ def invoke_gdeploy(config):
     with open(conf_file, 'w') as f:
         f.write(config)
     cmd = ["gdeploy", "-c", conf_file]
-    process = subprocess.Popen(args=cmd,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
+    process = subprocess.Popen(
+        args=cmd,
+        close_fds=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
     out, err = process.communicate()
     rc = process.returncode
     os.remove(conf_file)
