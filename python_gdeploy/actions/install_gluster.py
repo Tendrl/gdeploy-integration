@@ -22,10 +22,10 @@ def get_glusterfs_repo():
     return config.get("python-gdeploy", "glusterfs_repo")
 
 
-def setup_gluster_node(host_list,
-                       glusterfs_packages=None,
-                       glusterfs_repo=None,
-                       gpgcheck=None):
+def install_gluster_packages(host_list,
+                             glusterfs_packages=None,
+                             glusterfs_repo=None,
+                             gpgcheck=None):
     recipe = []
 
     recipe.append(gf.get_hosts(host_list))
@@ -36,39 +36,6 @@ def setup_gluster_node(host_list,
             glusterfs_packages if glusterfs_packages else GLUSTERFS_PACKAGES,
             glusterfs_repo if glusterfs_repo else get_glusterfs_repo(),
             gpgcheck if gpgcheck else "no"
-        )
-    )
-
-    recipe.append(
-        gf.get_service(
-            "enable",
-            "glusterd"
-        )
-    )
-
-    recipe.append(
-        gf.get_service(
-            "start",
-            "glusterd"
-        )
-    )
-
-    glusterfs_ports = [
-        "111/tcp",
-        "2049/tcp",
-        "54321/tcp",
-        "5900/tcp",
-        "5900-6923/tcp",
-        "5666/tcp",
-        "16514/tcp"
-    ]
-
-    recipe.append(
-        gf.get_firewall(
-            "add",
-            glusterfs_ports,
-            "glusterfs",
-            permanent="true"
         )
     )
 

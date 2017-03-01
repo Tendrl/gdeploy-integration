@@ -1,8 +1,8 @@
-from python_gdeploy.actions import setup_gluster_node as sgn
+from python_gdeploy.actions import install_gluster as ig
 
 
-class TestSetupGlusterNode(object):
-    def test_setup_gluster_node(self, monkeypatch):
+class TestInstallGluster(object):
+    def test_install_gluster(self, monkeypatch):
         host_list = ["12.23.34.45", "22.23.34.45"]
         glusterfs_repo = "https://download.gluster.org/gluster.repo"
 
@@ -24,27 +24,10 @@ class TestSetupGlusterNode(object):
                         'glusterfs-fuse'
                     ],
                     'update': 'no'}},
-                {'service': {
-                    'action': 'enable',
-                    'ignore_service_errors': 'no',
-                    'service': 'glusterd'}},
-                {'service': {
-                    'action': 'start',
-                    'ignore_service_errors': 'no',
-                    'service': 'glusterd'}},
-                {'firewalld': {
-                    'action': 'add',
-                    'services': 'glusterfs',
-                    'permanent': 'true',
-                    'ports': [
-                        '111/tcp', '2049/tcp',
-                        '54321/tcp', '5900/tcp',
-                        '5900-6923/tcp', '5666/tcp',
-                        '16514/tcp']}}
             ]
             assert recipe == expected_recipe
             return ""
-        monkeypatch.setattr(sgn, 'cook_gdeploy_config',
+        monkeypatch.setattr(ig, 'cook_gdeploy_config',
                             mock_cook_gdeploy_config)
 
         def mock_invoke_gdeploy(config):
@@ -52,10 +35,10 @@ class TestSetupGlusterNode(object):
             err = ""
             rc = 0
             return out, err, rc
-        monkeypatch.setattr(sgn, 'invoke_gdeploy',
+        monkeypatch.setattr(ig, 'invoke_gdeploy',
                             mock_invoke_gdeploy)
 
-        out, err, rc = sgn.setup_gluster_node(
+        out, err, rc = ig.install_gluster_packages(
             host_list,
             glusterfs_repo=glusterfs_repo
         )
