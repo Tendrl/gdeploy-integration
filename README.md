@@ -31,7 +31,7 @@ Installation from source on CentOS 7:
        
 3. Configure python-gdeploy:
 
-   Copy python-gdeploy located at etc/python-gdeploy.conf to /etc/python-gdeploy/python-gdeploy.conf
+   Copy python-gdeploy located at etc/python-gdeploy.conf.sample to /etc/python-gdeploy/python-gdeploy.conf
        ```
        $ mkdir -p /etc/python-gdeploy
        

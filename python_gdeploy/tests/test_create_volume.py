@@ -10,7 +10,7 @@ class TestCreateVolume(object):
             {"32.23.34.45": ["brick5", "brick6"]},
         ]
         transport = "rdma"
-        replica_count = "2"
+        replica_count = "3"
         force = False
 
         def mock_cook_gdeploy_config(recipe):
@@ -21,12 +21,12 @@ class TestCreateVolume(object):
                         "volname": "vol1",
                         "action": "create",
                         "brick_dirs": [
-                            "12.23.34.45:brick1", "12.23.34.45:brick2",
-                            "22.23.34.45:brick3", "22.23.34.45:brick4",
-                            "32.23.34.45:brick5", "32.23.34.45:brick6"
+                            "12.23.34.45:brick1", "22.23.34.45:brick3",
+                            "32.23.34.45:brick5", "12.23.34.45:brick2",
+                            "22.23.34.45:brick4", "32.23.34.45:brick6"
                         ],
                         "transport": "rdma",
-                        "replica_count": "2",
+                        "replica_count": "3",
                         "force": "no",
                         "ignore_volume_errors": "no",
                     }

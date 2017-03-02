@@ -4,6 +4,12 @@ from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
 def create_cluster(host_list):
+    """sample host list:
+
+    ["12.34.45.65","34.23.67.34", "12.76.77.88"]
+
+    """
+
     recipe = []
     recipe.append(gf.get_hosts(host_list))
     recipe.append(gf.get_peer("probe"))

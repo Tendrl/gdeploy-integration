@@ -26,6 +26,12 @@ def install_gluster_packages(host_list,
                              glusterfs_packages=None,
                              glusterfs_repo=None,
                              gpgcheck=None):
+    """sample host list:
+
+    ["12.34.45.65","34.23.67.34", "12.76.77.88"]
+
+    """
+
     recipe = []
 
     recipe.append(gf.get_hosts(host_list))
