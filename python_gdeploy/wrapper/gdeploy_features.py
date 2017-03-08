@@ -10,7 +10,19 @@ def get_hosts(host_list):
     return host
 
 
-def get_peer(action):
+def get_tuned_profile(tuned_profile):
+    if tuned_profile not in [
+            "rhgs-sequential-io",
+            "rhgs-random-io"]:
+        msg = "profile %s is unsupported tuned-profile" % (tuned_profile)
+        raise UnsupportedOptionError(msg)
+    tp = {
+        "tune-profile": tuned_profile
+    }
+    return tp
+
+
+def get_peer(action, force=None):
     if action not in ["probe", "detach"]:
         msg = "Action %s is unsupported action for peer feature" % (action)
         raise UnsupportedOptionError(msg)
@@ -19,6 +31,9 @@ def get_peer(action):
         "action": action,
         "ignore_peer_errors": "no"
     }
+
+    if force:
+        peer.update({"force": force})
 
     return {"peer": peer}
 

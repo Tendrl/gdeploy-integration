@@ -3,10 +3,9 @@ from python_gdeploy.wrapper.gdeploy_wrapper import cook_gdeploy_config
 from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
-def create_volume(volume_name, brick_details, transport=None,
-                  replica_count=None, disperse_count=None,
-                  redundancy_count=None, tuned_profile=None,
-                  force=False):
+def shrink_gluster_volume(volume_name, brick_details, action,
+                          replica_count=None, disperse_count=None,
+                          redundancy_count=None):
     """Brick details should be of following form, its a list of list
 
     where each sublist is a collection of bricks which forms a replica
@@ -100,27 +99,12 @@ def create_volume(volume_name, brick_details, transport=None,
     recipe.append(gf.get_hosts(list(host_list)))
 
     arg_dict = {}
-    force = "yes" if force else "no"
-    arg_dict.update({"force": force})
-    args = [volume_name, "create", brick_list]
-
-    if transport:
-        arg_dict.update({"transport": transport})
-    if replica_count:
-        arg_dict.update({"replica_count": replica_count})
-    if disperse_count and redundancy_count:
-        arg_dict.update({"disperse_count": disperse_count,
-                         "redundancy_count": redundancy_count,
-                         "disperse": "yes"})
+    arg_dict.update({"state": action})
+    args = [volume_name, "remove-brick", brick_list]
 
     recipe.append(
         gf.get_volume(*args, **arg_dict)
     )
-
-    if tuned_profile:
-        recipe.append(
-            gf.get_tuned_profile(tuned_profile)
-        )
 
     config_str = cook_gdeploy_config(recipe)
 

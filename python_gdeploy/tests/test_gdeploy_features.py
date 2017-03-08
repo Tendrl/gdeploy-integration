@@ -61,6 +61,22 @@ class TestGdeployFeatures(object):
             action
         )
 
+    def test_get_tuned_profile(self):
+        profile = "rhgs-random-io"
+        tp = gf.get_tuned_profile(profile)
+
+        expected_tp_dict = {
+            "tune-profile": "rhgs-random-io"
+        }
+        assert tp == expected_tp_dict
+
+        profile = "invalid_option"
+        pytest.raises(
+            gf.UnsupportedOptionError,
+            gf.get_tuned_profile,
+            profile
+        )
+
     def test_get_yum(self):
         action = "install"
         packages = ["glusterfs", "glusterfs-cli", "glusterfs-api"]

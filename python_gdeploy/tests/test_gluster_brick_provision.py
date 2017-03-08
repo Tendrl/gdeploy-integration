@@ -3,7 +3,7 @@ from python_gdeploy.actions import gluster_brick_provision as gbp
 
 
 class TestGlusterBrickProvison(object):
-    def test_gluster_brick_provison(self, monkeypatch):
+    def test_gluster_brick_provision(self, monkeypatch):
         disk_detail = {
             "12.23.34.45": {
                 "/dev/sdb": {
@@ -56,15 +56,15 @@ class TestGlusterBrickProvison(object):
                             mock_cook_gdeploy_config)
 
         def mock_invoke_gdeploy(config):
-            out = "succefully provisoned"
+            out = "succefully provisioned"
             err = ""
             rc = 0
             return out, err, rc
         monkeypatch.setattr(gbp, 'invoke_gdeploy',
                             mock_invoke_gdeploy)
 
-        out, err, rc = gbp.provison_disks(disk_detail)
-        assert out == "succefully provisoned"
+        out, err, rc = gbp.provision_disks(disk_detail)
+        assert out == "succefully provisioned"
         assert err == ""
         assert rc == 0
 
@@ -104,16 +104,16 @@ class TestGlusterBrickProvison(object):
         monkeypatch.setattr(gbp, 'cook_gdeploy_config',
                             mock_cook_gdeploy_config)
 
-        out, err, rc = gbp.provison_disks(disk_detail, "RAID10",
+        out, err, rc = gbp.provision_disks(disk_detail, "RAID10",
                                           "8", "256")
-        assert out == "succefully provisoned"
+        assert out == "succefully provisioned"
         assert err == ""
         assert rc == 0
 
         disk_type = "RAID10"
         pytest.raises(
             ValueError,
-            gbp.provison_disks,
+            gbp.provision_disks,
             disk_detail,
             disk_type
         )
