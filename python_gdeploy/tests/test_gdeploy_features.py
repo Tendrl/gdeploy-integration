@@ -211,6 +211,7 @@ class TestGdeployFeatures(object):
         vgs = ["vg1", "vg2", "vg3"]
         pools = ["pool1", "pool2", "pool3"]
         lvs = ["lv1", "lv2", "lv3"]
+        pvs = ["pv1", "pv2", "pv3"]
         mountpoints = ["/mnt/data1", "/mnt/data2", "/mnt/data3"]
         brick_dirs = ["/mnt/data1/1", "/mnt/data2/2", "/mnt/data3/2"]
         target_host = "12.34.45.56"
@@ -221,6 +222,7 @@ class TestGdeployFeatures(object):
             vgs,
             pools,
             lvs,
+            pvs,
             lv_size,
             mountpoints,
             brick_dirs,
@@ -232,6 +234,7 @@ class TestGdeployFeatures(object):
                 "devices": ["/dev/sda", "/dev/sdb"],
                 "vgs": ["vg1", "vg2", "vg3"],
                 "lvs": ["lv1", "lv2", "lv3"],
+                "pvs": ["pv1", "pv2", "pv3"],
                 "pools": ["pool1", "pool2", "pool3"],
                 "size": "5MB",
                 "mountpoints": ["/mnt/data1", "/mnt/data2", "/mnt/data3"],

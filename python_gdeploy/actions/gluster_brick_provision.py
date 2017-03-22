@@ -4,7 +4,7 @@ from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
 def provision_disks(disk_dictionary, disk_type=None,
-                   disk_count=None, stripe_size=None):
+                    disk_count=None, stripe_size=None):
     """Structure of disk dictionary
 
     {"host_name_0": {
@@ -13,7 +13,15 @@ def provision_disks(disk_dictionary, disk_type=None,
 
                    "mount_path": <actual-mountpath>,
 
-                   "brick_path": <actual-brick-path>
+                   "brick_path": <actual-brick-path>,
+
+                   "vg": <vg-name>,
+
+                   "lv": <lv-name>,
+
+                   "pv": <pv-name>,
+
+                   "pool": <pool-name>,
 
            },
 
@@ -21,7 +29,15 @@ def provision_disks(disk_dictionary, disk_type=None,
 
                    "mount_path": <actual-mountpath>,
 
-                   "brick_path": <actual-brick-path>
+                   "brick_path": <actual-brick-path>,
+
+                   "vg": <vg-name>,
+
+                   "lv": <lv-name>,
+
+                   "pv": <pv-name>,
+
+                   "pool": <pool-name>,
 
            },
 
@@ -29,7 +45,15 @@ def provision_disks(disk_dictionary, disk_type=None,
 
                    "mount_path": <actual-mountpath>,
 
-                   "brick_path": <actual-brick-path>
+                   "brick_path": <actual-brick-path>,
+
+                   "vg": <vg-name>,
+
+                   "lv": <lv-name>,
+
+                   "pv": <pv-name>,
+
+                   "pool": <pool-name>,
 
            }
 
@@ -41,7 +65,15 @@ def provision_disks(disk_dictionary, disk_type=None,
 
                    "mount_path": <actual-mountpath>,
 
-                   "brick_path": <actual-brick-path>
+                   "brick_path": <actual-brick-path>,
+
+                   "vg": <vg-name>,
+
+                   "lv": <lv-name>,
+
+                   "pv": <pv-name>,
+
+                   "pool": <pool-name>,
 
            },
 
@@ -49,7 +81,15 @@ def provision_disks(disk_dictionary, disk_type=None,
 
                    "mount_path": <actual-mountpath>,
 
-                   "brick_path": <actual-brick-path>
+                   "brick_path": <actual-brick-path>,
+
+                   "vg": <vg-name>,
+
+                   "lv": <lv-name>,
+
+                   "pv": <pv-name>,
+
+                   "pool": <pool-name>,
 
            },
 
@@ -57,7 +97,15 @@ def provision_disks(disk_dictionary, disk_type=None,
 
                    "mount_path": <actual-mountpath>,
 
-                   "brick_path": <actual-brick-path>
+                   "brick_path": <actual-brick-path>,
+
+                   "vg": <vg-name>,
+
+                   "lv": <lv-name>,
+
+                   "pv": <pv-name>,
+
+                   "pool": <pool-name>,
 
            },
 
@@ -74,16 +122,28 @@ def provision_disks(disk_dictionary, disk_type=None,
         device_list = []
         mount_point_list = []
         brick_path_list = []
+        vg_list = []
+        pool_list = []
+        lv_list = []
+        pv_list = []
         for disk, detail in disks.iteritems():
             device_list.append(disk)
             mount_point_list.append(detail["mount_path"])
             brick_path_list.append(detail["brick_path"])
+            lv_list.append(detail["lv"])
+            pool_list.append(detail["pool"])
+            vg_list.append(detail["vg"])
+            pv_list.append(detail["pv"])
         recipe.append(
             gf.get_backend_setup(
                 device_list,
                 mount_points=mount_point_list,
                 brick_dirs=brick_path_list,
-                target_host=host
+                target_host=host,
+                lvs=lv_list,
+                pools=pool_list,
+                vgs=vg_list,
+                pvs=pv_list
             )
         )
     if disk_type:

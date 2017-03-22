@@ -135,7 +135,7 @@ def get_service(action, services, target_host=""):
 
 
 def get_backend_setup(devices, vgs=None, pools=None, lvs=None,
-                      lv_size=None, mount_points=None,
+                      pvs=None, lv_size=None, mount_points=None,
                       brick_dirs=None, target_host=""):
     backend_setup = {
         "devices": devices
@@ -147,6 +147,10 @@ def get_backend_setup(devices, vgs=None, pools=None, lvs=None,
     if lvs:
         backend_setup.update(
             {"lvs": lvs}
+        )
+    if pvs:
+        backend_setup.update(
+            {"pvs": pvs}
         )
     if pools:
         backend_setup.update(
