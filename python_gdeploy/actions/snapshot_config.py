@@ -4,6 +4,14 @@ from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
 def volume_snapshot_config(volume_name, hostname, action, snapname=""):
+    """
+
+    action: [create|delete|clone]
+
+    """
+    # TODO (team) currently only snapshot create, delete and clone is
+    # supported. However gdeploy provides many other snapshot related
+    # actions. These have to be added as and when requirement arises.
     recipe = []
     host_vol = hostname + ":" + volume_name
     recipe.append(

@@ -33,16 +33,23 @@ def cook_gdeploy_config(recipe):
 
 def invoke_gdeploy(config):
     conf_file = GDEPLOY_CONFIG_PATH + str(uuid.uuid4()) + ".conf"
-    with open(conf_file, 'w') as f:
-        f.write(config)
     cmd = ["gdeploy", "-c", conf_file]
-    process = subprocess.Popen(
-        args=cmd,
-        close_fds=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE
-    )
-    out, err = process.communicate()
-    rc = process.returncode
-    os.remove(conf_file)
+    try:
+        with open(conf_file, 'w') as f:
+            f.write(config)
+        process = subprocess.Popen(
+            args=cmd,
+            close_fds=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        out, err = process.communicate()
+        rc = process.returncode
+    except Exception as e:
+        rc = -1
+        out = ""
+        err = "Gdeploy command invocation failed. Error: %s" % str(e)
+    finally:
+        if os.path.isfile(conf_file):
+            os.remove(conf_file)
     return out, err, rc

@@ -31,11 +31,11 @@ Installation from source on CentOS 7:
        
 3. Configure python-gdeploy:
 
-   Copy python-gdeploy located at etc/python-gdeploy.conf.sample to /etc/python-gdeploy/python-gdeploy.conf
+   Copy python-gdeploy located at etc/python-gdeploy/python-gdeploy.conf.sample to /etc/python-gdeploy/python-gdeploy.conf
        ```
        $ mkdir -p /etc/python-gdeploy
        
-       $ cp etc/python-gdeploy.conf /etc/python-gdeploy/python-gdeploy.conf
+       $ cp etc/python-gdeploy/python-gdeploy.conf /etc/python-gdeploy/python-gdeploy.conf
        ```
       
    This configuration file has a field called glusterfs_repo, If you want to install glusterfs from any other repo than default, Please modify itaccordingly.

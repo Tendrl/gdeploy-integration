@@ -15,7 +15,12 @@ def volume_quota_config(volume_name, hostname, action, dir_details={}):
       {"dir3": "size3"},
 
     ]
+    action: ["limit-usage"|"limit-objects"]
     """
+    # TODO (team) quota currently has only 2 actions namely limit-usage and
+    # limit-objects. However gdeploy provides quite a few actions, this needs
+    # to be enhanced
+
     recipe = []
     host_vol = hostname + ":" + volume_name
     if dir_details:
