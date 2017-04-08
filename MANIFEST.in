@@ -1,0 +1,7 @@
+include LICENSE
+include README.md
+exclude .gitignore
+exclude .gitreview
+graft etc
+graft python_gdeploy
+global-exclude *.pyc
