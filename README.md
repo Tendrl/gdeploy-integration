@@ -40,10 +40,6 @@ Installation from source on CentOS 7:
       
    This configuration file has a field called glusterfs_repo, If you want to install glusterfs from any other repo than default, Please modify itaccordingly.
 
-4. Create the directory /var/run/python_gdeploy from where gdeploy picks the files
-
-      ```
-      mkdir -p /var/run/python_gdeploy
 
 Usage:
 ------
