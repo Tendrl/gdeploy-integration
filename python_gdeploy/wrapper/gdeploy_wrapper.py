@@ -2,7 +2,7 @@ import os
 import subprocess
 import uuid
 
-GDEPLOY_CONFIG_PATH = "/var/run/python_gdeploy/config_"
+GDEPLOY_CONFIG_PATH = "/tmp/config_"
 
 
 def add_section(section):
