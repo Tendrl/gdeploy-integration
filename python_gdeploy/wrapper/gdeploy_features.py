@@ -239,6 +239,7 @@ def get_volume(volume_name, action, brick_dirs=None, transport=None,
         volume.update({"transport": transport})
     if replica_count:
         volume.update({"replica_count": str(replica_count)})
+        volume.update({"replica": "yes"})
     if disperse_count:
         volume.update({"disperse_count": str(disperse_count)})
     if disperse:

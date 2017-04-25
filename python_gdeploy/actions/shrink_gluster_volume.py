@@ -5,7 +5,8 @@ from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 def shrink_gluster_volume(volume_name, brick_details, action,
                           replica_count=None, disperse_count=None,
-                          redundancy_count=None):
+                          decrease_replica_count=False,
+                          force=False):
     """Brick details should be of following form, its a list of list
 
     where each sublist is a collection of bricks which forms a replica
@@ -59,7 +60,7 @@ def shrink_gluster_volume(volume_name, brick_details, action,
     recipe = []
     brick_list = []
     host_list = set()
-    if replica_count:
+    if replica_count and not decrease_replica_count:
         if len(brick_details[0]) != int(replica_count):
             out = "insufficient brick sets for replica count" + \
                   ": %s. Brick set count %s" % (
@@ -69,13 +70,12 @@ def shrink_gluster_volume(volume_name, brick_details, action,
             rc = 1
             return out, err, rc
 
-    if disperse_count and redundancy_count:
+    if disperse_count:
         if len(brick_details[0]) != (
-                int(disperse_count) + int(redundancy_count)):
+                int(disperse_count)):
             out = "insufficient nos bricks for disperse count" + \
-                  ": %s and redundancy count: %s. Brick count: %s" % (
+                  ": %s. Brick count: %s" % (
                       disperse_count,
-                      redundancy_count,
                       len(brick_details[0])
                   )
             err = out
@@ -99,7 +99,16 @@ def shrink_gluster_volume(volume_name, brick_details, action,
     recipe.append(gf.get_hosts(list(host_list)))
 
     arg_dict = {}
-    arg_dict.update({"state": action})
+
+    force = "yes" if force else "no"
+    arg_dict.update({"force": force})
+
+    if decrease_replica_count:
+        arg_dict.update({"replica_count": replica_count})
+        arg_dict.update({"state": "force"})
+    else:
+        arg_dict.update({"state": action})
+
     args = [volume_name, "remove-brick", brick_list]
 
     recipe.append(
