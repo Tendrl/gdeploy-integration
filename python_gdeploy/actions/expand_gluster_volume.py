@@ -5,8 +5,7 @@ from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 def expand_volume(volume_name, brick_details,
                   replica_count=None, disperse_count=None,
-                  redundancy_count=None,
-                  force=False):
+                  force=False, increase_replica_count=False):
     """Brick details should be of following form, its a list of list
 
     where each sublist is a collection of bricks which forms a replica
@@ -60,7 +59,7 @@ def expand_volume(volume_name, brick_details,
     recipe = []
     brick_list = []
     host_list = set()
-    if replica_count:
+    if replica_count and not increase_replica_count:
         if len(brick_details[0]) != int(replica_count):
             out = "insufficient brick sets for replica count" + \
                   ": %s. Brick set count %s" % (
@@ -70,13 +69,12 @@ def expand_volume(volume_name, brick_details,
             rc = 1
             return out, err, rc
 
-    if disperse_count and redundancy_count:
+    if disperse_count:
         if len(brick_details[0]) != (
-                int(disperse_count) + int(redundancy_count)):
+                int(disperse_count)):
             out = "insufficient nos bricks for disperse count" + \
-                  ": %s and redundancy count: %s. Brick count: %s" % (
+                  ": %s. Brick count: %s" % (
                       disperse_count,
-                      redundancy_count,
                       len(brick_details[0])
                   )
             err = out
@@ -102,6 +100,10 @@ def expand_volume(volume_name, brick_details,
     arg_dict = {}
     force = "yes" if force else "no"
     arg_dict.update({"force": force})
+    if increase_replica_count:
+        arg_dict.update({"replica_count": replica_count})
+        arg_dict.update({"state": "force"})
+
     args = [volume_name, "add-brick", brick_list]
 
     recipe.append(
