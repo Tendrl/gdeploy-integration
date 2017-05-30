@@ -27,8 +27,6 @@ rm -rf %{name}.egg-info
 
 %install
 %{__python} setup.py install --single-version-externally-managed -O1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
-install -m  0755  --directory $RPM_BUILD_ROOT%{_sysconfdir}/python-gdeploy
-install -Dm 0644 etc/python-gdeploy/python-gdeploy.conf.sample  $RPM_BUILD_ROOT%{_sysconfdir}/python-gdeploy/python-gdeploy.conf
 
 %check
 py.test -v python_gdeploy/tests || :
