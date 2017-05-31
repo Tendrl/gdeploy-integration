@@ -16,12 +16,6 @@ GLUSTERFS_PACKAGES = [
 ]
 
 
-def get_glusterfs_repo():
-    config = ConfigParser.SafeConfigParser()
-    config.read('/etc/python-gdeploy/python-gdeploy.conf')
-    return config.get("python-gdeploy", "glusterfs_repo")
-
-
 def install_gluster_packages(host_list,
                              glusterfs_packages=None,
                              glusterfs_repo=None,
@@ -40,7 +34,7 @@ def install_gluster_packages(host_list,
         gf.get_yum(
             "install",
             glusterfs_packages if glusterfs_packages else GLUSTERFS_PACKAGES,
-            glusterfs_repo if glusterfs_repo else get_glusterfs_repo(),
+            glusterfs_repo,
             gpgcheck if gpgcheck else "no"
         )
     )
