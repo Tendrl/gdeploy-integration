@@ -1,5 +1,5 @@
 Name: python-gdeploy
-Version: 1.0.0
+Version: 1.1.0
 Release: 1%{?dist}
 BuildArch: noarch
 Summary: python gdeploy is a python wrapper for gdeploy
@@ -36,6 +36,9 @@ py.test -v python_gdeploy/tests || :
 %license LICENSE
 
 %changelog
+* Fri Jun 02 2017 Rohan Kanade <rkanade@redhat.com> - 1.1.0-1
+- Release python-gdeploy v1.1.0
+
 * Tue Apr 18 2017 Rohan Kanade <rkanade@redhat.com> - 1.0.0-1
 - Release python-gdeploy v1.0.0
 
