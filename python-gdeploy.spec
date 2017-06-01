@@ -34,7 +34,6 @@ py.test -v python_gdeploy/tests || :
 %files -f INSTALLED_FILES
 %doc README.md
 %license LICENSE
-%{_sysconfdir}/python-gdeploy/python-gdeploy.conf
 
 %changelog
 * Tue Apr 18 2017 Rohan Kanade <rkanade@redhat.com> - 1.0.0-1
