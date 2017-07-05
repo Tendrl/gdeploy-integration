@@ -116,22 +116,27 @@ def get_firewall(action, ports, services="", zone="",
     return {section_header: firewall}
 
 
-def get_service(action, services, target_host=""):
-    if action not in ["start", "stop", "restart",
-                      "reload", "enable", "disable"]:
-        msg = "Action %s is unsupported action for service feature" % (action)
-        raise UnsupportedOptionError(msg)
+def get_service(services):
+    result = []
+    index = 1
+    for service in services:
+        if service["action"] not in ["start", "stop", "restart",
+                          "reload", "enable", "disable"]:
+            msg = "Action %s is unsupported action for service feature" % (service["action"])
+            raise UnsupportedOptionError(msg)
 
-    service = {
-        "action": action,
-        "service": services,
-        "ignore_service_errors": "no"
-    }
+        service = {
+            "action": service["action"],
+            "service": service["service"],
+            "ignore_service_errors": "no"
+        }
 
-    section_header = "service"
-    if target_host:
-        section_header += ":" + target_host
-    return {section_header: service}
+        section_header = "service" + str(index)
+        index = index + 1
+        if "target_host" in service:
+            section_header += ":" + service["target_host"]
+        result.append({section_header: service})
+    return result
 
 
 def get_backend_setup(devices, vgs=None, pools=None, lvs=None,

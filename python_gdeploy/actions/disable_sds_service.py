@@ -3,7 +3,7 @@ from python_gdeploy.wrapper.gdeploy_wrapper import cook_gdeploy_config
 from python_gdeploy.wrapper.gdeploy_wrapper import invoke_gdeploy
 
 
-def configure_gluster_service(host_list):
+def disable_sds_service(host_list):
     """sample host list:
 
     ["12.34.45.65","34.23.67.34", "12.76.77.88"]
@@ -16,14 +16,14 @@ def configure_gluster_service(host_list):
     services = []
     services.append(
         {
-            "action": "enable",
-            "service": "glusterd"
+            "action": "disable",
+            "service": "tendrl-gluster-integration"
         }
     )
     services.append(
         {
-            "action": "start",
-            "service": "glusterd"
+            "action": "stop",
+            "service": "tendrl-gluster-integration"
         }
     )
     recipe += gf.get_service(services)
